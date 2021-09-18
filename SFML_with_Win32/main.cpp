@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <Windows.h>
+#include <cmath>
 
 HWND button;
 
@@ -46,6 +47,18 @@ int main()
 		20, 20, 580, 350, window, NULL, instance, NULL);
 	sf::RenderWindow sfmlWindow(childWindow);
 
+	sf::RectangleShape rect;
+	rect.setSize(sf::Vector2f(100, 20));
+	rect.setFillColor(sf::Color::Red);
+
+	sf::Sprite tom;
+	sf::Texture tom_tex;
+	if (!tom_tex.loadFromFile("tom.png"))
+		return EXIT_FAILURE;
+	tom.setTexture(tom_tex);
+
+	sf::Clock clk;
+
 	MSG message;
 	message.message = static_cast<UINT>(~WM_QUIT);
 	while (message.message != WM_QUIT) {
@@ -55,7 +68,12 @@ int main()
 		}
 		else
 		{
+			float time = clk.getElapsedTime().asSeconds();
+
 			sfmlWindow.clear();
+			sfmlWindow.draw(tom);
+			rect.setPosition(450, 150 + std::cos(time) * 100);
+			sfmlWindow.draw(rect);
 			sfmlWindow.display();
 		}
 
